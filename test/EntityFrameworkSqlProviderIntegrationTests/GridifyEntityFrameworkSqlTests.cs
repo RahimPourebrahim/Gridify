@@ -144,4 +144,52 @@ public class GridifyEntityFrameworkTests
       // Assert
       Assert.Equal(expected, actual);
    }
+
+
+   public class CustomContainsOperator : IGridifyOperator
+   {
+      public string GetOperator()
+      {
+         return "#=";
+      }
+
+      public Expression<OperatorParameter> OperatorHandler()
+      {
+         return (p, v) => EF.Functions.Contains(p, v.ToString());
+      }
+   }
+
+   [Fact]
+   public void ValueTypes_Equal()
+   {
+      GridifyGlobalConfiguration.CustomOperators.Register(new CustomContainsOperator());
+      // Arrange
+      const string search = "AFF-01.2022-00001";
+
+      var expected = _dbContext.Users.Where(q => q.Number == search).ToQueryString();
+
+      // Act
+      var actual = _dbContext.Users.ApplyFiltering("number #=" + search).ToQueryString();
+
+      // Assert
+      Assert.Equal(expected, actual);
+   }
+
+
+   [Fact]
+   public void ValueTypes_Contains()
+   {
+      GridifyGlobalConfiguration.CustomOperators.Register(new CustomContainsOperator());
+
+      // Arrange
+      const string search = "AFF";
+      var expected = _dbContext.Users.Where(q => EF.Functions.Contains(q.Number, search)).ToQueryString();
+
+
+      // Act
+      var actual = _dbContext.Users.ApplyFiltering("number #=" + search).ToQueryString();
+
+      // Assert
+      Assert.Equal(expected, actual);
+   }
 }
