@@ -1,0 +1,1 @@
+const e={key:"v-13ce4b9d",path:"/guide/autoMapper.html",title:"AutoMapper",lang:"en-US",frontmatter:{},excerpt:"",headers:[{level:2,title:"GridifyTo!",slug:"gridifyto",children:[]}],git:{updatedTime:1639145558e3},filePathRelative:"guide/autoMapper.md"};export{e as data};
